@@ -61,7 +61,7 @@ chmod +x build.sh
 
 This will create **libORB_SLAM3.so**  at *lib* folder and the executables in *Examples* folder.
 
-# 4. Running ORB-SLAM3 with your camera
+# 4. Running IRAF-SLAM with your camera
 
 Directory `Examples` contains several demo programs and calibration files to run ORB-SLAM3 in all sensor configurations with Intel Realsense cameras T265 and D435i. The steps needed to use your own camera are: 
 
@@ -71,7 +71,7 @@ Directory `Examples` contains several demo programs and calibration files to run
 
 3. Connect the camera to your computer using USB3 or the appropriate interface
 
-4. Run ORB-SLAM3. For example, for our D435i camera, we would execute:
+4. Run IRAF-SLAM. For example, for our D435i camera, we would execute:
 
 ```
 ./Examples/Stereo-Inertial/stereo_inertial_realsense_D435i Vocabulary/ORBvoc.txt ./Examples/Stereo-Inertial/RealSense_D435i.yaml
