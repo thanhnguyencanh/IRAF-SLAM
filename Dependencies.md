@@ -1,8 +1,9 @@
 ##List of Known Dependencies
-###ORB-SLAM3 v1.0
+###IRAF_SLAM v1.0
 
-In this document we list all the pieces of code included  by ORB-SLAM3 and linked libraries which are not property of the authors of ORB-SLAM3.
+This is an improvement version of ORB-SLAM3 for robustness front-end, so we would like to mention ORB-SLAM3 first.
 
+[ORB-SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3).
 
 #####Code in **src** and **include** folders
 
