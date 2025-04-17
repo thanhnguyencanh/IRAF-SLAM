@@ -2,7 +2,7 @@ import sys
 import numpy
 import numpy as np
 import argparse
-import associate_py3 as associate
+import py3_associate as associate
 
 import matplotlib
 
