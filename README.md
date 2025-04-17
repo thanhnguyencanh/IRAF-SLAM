@@ -70,7 +70,7 @@ First, we test with [EuRoC dataset](http://projects.asl.ethz.ch/datasets/doku.ph
 ./euroc_run.sh
 ```
 
-## Evaluation
+Evaluation
 ```
 ./euroc_evaluation.sh
 ```
