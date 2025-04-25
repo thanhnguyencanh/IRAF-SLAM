@@ -1,6 +1,7 @@
 /**
- * This file is part of ORB-SLAM3
+ * This file is part of IRAF-SLAM
  *
+ * Copyright (C) 2024-2025 Thanh Nguyen Canh, Bao Quoc Nguyen, HaoLan Zhang, Xiem HoangVan, and Chong NakYoung, School of Information Science, Japan Advanced Institute of Science and Technology (JAIST).
  * Copyright (C) 2017-2021 Carlos Campos, Richard Elvira, Juan J. Gómez Rodríguez, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
  * Copyright (C) 2014-2016 Raúl Mur-Artal, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
  *
@@ -107,10 +108,40 @@ namespace ORB_SLAM3
         int iniThFAST;
         int minThFAST;
 
-        // tag-change
+        // IRAF-SLAM, which compute adaptive threshold for FAST detection and C' value
+        /**
+          * @brief Compute keypoints using the old method (non-octree-based).
+          * 
+          * @param allKeypoints Output vector of keypoints for each level.
+        */
         double adaptiveThFAST; 
+
+        /**
+          * @brief Compute an adaptive threshold for FAST detection in a subregion.
+          * 
+          * @param subregion Input subregion of the image.
+          * @param subregion_size Size of the subregion.
+          * @return Computed adaptive threshold.
+        */
         double ComputeAdaptiveThreshold(const cv::Mat& subregion, int subregion_size);
+
+        /**
+          * @brief Calculate a threshold based on a histogram and the adaptive threshold.
+          * 
+          * @param hist Input histogram of intensity values.
+          * @return Calculated threshold.
+        */
         int calculateThreshold(const std::vector<double>& hist);
+
+        /**
+          * @brief Calculate the C' value for a given intensity and threshold.
+          * 
+          * @param I_mid Midpoint intensity value.
+          * @param t Threshold value.
+          * @param a Scaling factor (default: 0.3).
+          * @param C_min Minimum C' value (default: 7).
+          * @return Calculated C' value.
+          */
         int calculateCPrime(int I_mid, int t, double a = 0.3, int C_min = 7);
 
 

@@ -1,6 +1,7 @@
 /**
- * This file is part of ORB-SLAM3
- *
+ * This file is part of IRAF-SLAM
+ * 
+ * Copyright (C) 2024-2025 Thanh Nguyen Canh, Bao Quoc Nguyen, HaoLan Zhang, Xiem HoangVan, and Chong NakYoung, School of Information Science, Japan Advanced Institute of Science and Technology (JAIST).
  * Copyright (C) 2017-2021 Carlos Campos, Richard Elvira, Juan J. Gómez Rodríguez, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
  * Copyright (C) 2014-2016 Raúl Mur-Artal, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
  *
@@ -411,8 +412,6 @@ namespace ORB_SLAM3
 
 
 
-
-
     // tag-change
     double ORBextractor::ComputeAdaptiveThreshold(const cv::Mat& subregion, int subregion_size)
     {
@@ -498,8 +497,6 @@ namespace ORB_SLAM3
         double C_prime = std::max(C, static_cast<double>(C_min));
         return static_cast<int>(C_prime);
     }
-
-
 
 
 
@@ -1299,4 +1296,4 @@ namespace ORB_SLAM3
         }
     }
 
-} // namespace ORB_SLAM
+} // namespace IRAF-SLAM
