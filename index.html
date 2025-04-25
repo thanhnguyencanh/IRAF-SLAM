@@ -119,7 +119,7 @@
 
 <html>
   <head>
-        <title>S3M: Semantic Segmentation Sparse Mapping for UAVs with RGB-D Camera</title>
+        <title> IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments</title>
         <meta property="og:title" content="SE3HamDL" />
         <meta property="og:image" content="" />
         <meta property="og:url" content="" />
@@ -137,7 +137,7 @@ code {
   <body>
     <br>
     <center>
-    <span style="font-size:42px">S3M: Semantic Segmentation Sparse Mapping for UAVs with RGB-D Camera</span>
+    <span style="font-size:42px"> IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments</span>
     
     </center>
 
@@ -152,20 +152,28 @@ code {
 
          <td align=center width=150px>
          <center>
-         <span style="font-size:20px"> Van-Truong Nguyen </span>
+         <span style="font-size:20px"> Bao Nguyen Quoc </span>
          </center>
          </td>
+
+         <td align=center width=150px>
+          <center>
+          <span style="font-size:20px"> HaoLan Zhang</span>
+          </center>
+          </td>
+
+         <td align=center width=150px>
+          <center>
+          <span style="font-size:20px"><a href="https://aelibol.github.io/">Bupesh Rethinam Veeraiah</a></span>
+          </center>
+          </td>
 
          <td align=center width=150px>
          <center>
          <span style="font-size:20px"><a href="https://sites.google.com/site/xiemhoang/home?authuser=0">Xiem HoangVan</a></span>
          </center>
          </td>
-        <td align=center width=150px>
-        <center>
-        <span style="font-size:20px"><a href="https://aelibol.github.io/">Armagan Elibol</a></span>
-        </center>
-        </td>
+
         <td align=center width=150px>
           <center>
           <span style="font-size:20px"><a href="https://www.jaist.ac.jp/robot/">Nak Young Chong</a></span>
@@ -190,12 +198,12 @@ code {
      <tr>
        <td align=center width=100px>
        <center>
-       <span style="font-size:20px"><a href="https://arxiv.org/pdf/2401.08134">[Paper]</a></span>
+       <span style="font-size:20px"><a href="">[Paper]</a></span>
        </center>
        </td>
        <td align=center width=100px>
        <center>
-       <span style="font-size:20px"><a href="https://github.com/thanhnguyencanh/S3M_SLAM">[Code]</a></span>
+       <span style="font-size:20px"><a href="https://github.com/thanhnguyencanh/IRAF-SLAM">[Code]</a></span>
        </center>
        </td>
     
@@ -206,7 +214,7 @@ code {
             
 
             <br>
-            This paper presents a novel approach to address challenges in semantic information extraction and utilization within UAV operations. Our system integrates state-of-the-art visual SLAM to estimate a comprehensive 6-DoF pose and advanced object segmentation methods at the back end. To improve the computational and storage efficiency of the framework, we adopt a streamlined voxel-based 3D map representation - OctoMap to build a working system. Furthermore, the fusion algorithm is incorporated to obtain the semantic information of each frame from the front-end SLAM task, and the corresponding point. By leveraging semantic information, our framework enhances the UAV's ability to perceive and navigate through indoor spaces, addressing challenges in pose estimation accuracy and uncertainty reduction. Through Gazebo simulations, we validate the efficacy of our proposed system and successfully embed our approach into a Jetson Xavier AGX unit for real-world applications.
+            Robust Visual SLAM (vSLAM) is essential for autonomous systems operating in real-world environments, where challenges such as dynamic objects, low texture, and critically, varying illumination conditions often degrade performance. Existing feature-based SLAM systems rely on fixed front-end parameters, making them vulnerable to sudden lighting changes and unstable feature tracking. To address these challenges, we propose \textit{IRAF-SLAM}, an Illumination-Robust and Adaptive Feature-Culling front-end designed to enhance vSLAM resilience in complex and challenging environments. Our approach introduces: \textit{(1)} an image enhancement scheme to preprocess and adjust image quality under varying lighting conditions; \textit{(2)} an adaptive feature extraction mechanism that dynamically adjusts detection sensitivity based on image entropy, pixel intensity, and gradient analysis; and \textit{(3)} a feature culling strategy that filters out unreliable feature points using density distribution analysis and a lighting impact factor. Comprehensive evaluations on the TUM and European Robotics Challenge (EuRoC) datasets demonstrate that IRAF-SLAM significantly reduces tracking failures and achieves superior trajectory accuracy compared to state-of-the-art vSLAM methods under adverse illumination conditions. These results highlight the effectiveness of adaptive front-end strategies in improving vSLAM robustness without incurring significant computational overhead. The implementation of IRAF-SLAM is publicly available at~\url{https://thanhnguyencanh.github.io/IRAF-SLAM/}
             <br><br>
 
       <hr>
@@ -219,9 +227,9 @@ code {
                   <!-- <td><a href="#"><img class="layered-paper-big" style="height:175px" src="./resources/images/paper.png"/></a></td> -->
                   <td><a href="https://arxiv.org/pdf/2401.08134"><img style="height:400px" src="docs/images/thumbnails1.png"/></a></td>
                   <td><span style="font-size:14pt">Thanh Nguyen Canh, Van-Truong Nguyen, Xiem HoangVan, Armagan Elibol, Nak Young Chong<br><br>
-                    S3M: Semantic Segmentation Sparse Mapping for UAVs with RGB-D Camera<br><br>
+                     IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments<br><br>
                   SII 2024.<br><br>
-                      <a href="https://arxiv.org/abs/2401.08134">[pdf]</a> &nbsp; &nbsp;
+                      <a href="">[pdf]</a> &nbsp; &nbsp;
                    <!--    <a href="./resources/bibtex.txt">[Bibtex]</a> -->
                   <!-- [hosted on <a href="#">arXiv</a>]</a> -->
                     </td>
@@ -487,25 +495,25 @@ code {
               <br>
               </center></tr> -->
               <tr><left> <br>
-                          <span style="font-size:18px">1.  Canh T. N., Nguyen V-T, HoangVan X., Elibol A., Chong A.Y. <a href='https://thanhnguyencanh.github.io/S3M_SLAM/'>S3M: Semantic Segmentation Sparse Mapping for UAVs with RGB-D Camera</a>. Symposium on System Integration (SII), 2024.
+                          <span style="font-size:18px">1.  Canh T. N., Quoc N. B., Zhang H., Bupesh R.V. HoangVan X., Chong A.Y. <a href='https://thanhnguyencanh.github.io/S3M_SLAM/'> IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments</a>. Symposium on System Integration (SII), 2024.
 
                           
               <br><br>
                               <code>@inproceedings{canh2024s3m, 
                                   <br>
-                                    author    = {Canh, Thanh Nguyen and Nguyen, Van-Truong and HoangVan, Xiem and Elibol, Armagan and Chong, Nak Young}, 
+                                    author    = {Canh, Thanh Nguyen and Quoc, Bao Nguyen and Zhang, Hao Lan and Veeraiah, Bupesh Rethinam and HoangVan, Xiem and Chong, Nak Young}, 
                                   <br>
-                                    title     = {{S3M: Semantic Segmentation Sparse Mapping for UAVs with RGB-D Camera}}, 
+                                    title     = {{ IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments}}, 
                                   <br>
-                                    booktitle = {2024 IEEE/SICE International Symposium on System Integration (SII)}, 
+                                    booktitle = {)}, 
                                   <br>
                                     year      = {2024}, 
                                   <br>
-                                    address   = {Vietnam}, 
+                                    address   = {}, 
                                   <br>
-                                    month     = {Jan}, 
+                                    month     = {}, 
                                   <br>
-                                    DOI       = {10.1109/SII58957.2024.10417379}
+                                    DOI       = {}
                                   <br>
                                 } 
                               </code>
@@ -521,7 +529,7 @@ code {
                     <td>
                       <left>
                 <center><h1>Acknowledgements</h1></center>
-                We gratefully acknowledge support fromthe Asian Office of Aerospace Research and Development under Grant/Cooperative Agreement Award No. FA2386-22-1-4042.
+                This work was supported by JST SPRING, Japan Grant Number JPMJSP2102.
                 <br>
                 This webpage template was borrowed from <a href="https://akanazawa.github.io/cmr/">https://akanazawa.github.io/cmr/</a>.
             </left>
