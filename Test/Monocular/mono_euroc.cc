@@ -1,6 +1,7 @@
 /**
- * This file is part of ORB-SLAM3
+ * This file is part of IRAF-SLAM
  *
+ * Copyright (C) 2024-2025 Thanh Nguyen Canh, Bao Quoc Nguyen, HaoLan Zhang, Xiem HoangVan, and Chong NakYoung, School of Information Science, Japan Advanced Institute of Science and Technology (JAIST).
  * Copyright (C) 2017-2021 Carlos Campos, Richard Elvira, Juan J. Gómez Rodríguez, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
  * Copyright (C) 2014-2016 Raúl Mur-Artal, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
  *
@@ -24,18 +25,19 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
 
+#include <System.h>
+
+
 #include <vector>
 #include <cmath>
 #include <numeric>
-
-
-#include <System.h>
 
 using namespace std;
 
 void LoadImages(const string &strImagePath, const string &strPathTimes,
                 vector<string> &vstrImages, vector<double> &vTimeStamps);
 
+// Calculates the normalized histogram of a grayscale image.
 cv::Mat calculate_histogram(const cv::Mat& image);
 cv::Mat adjust_gamma(const cv::Mat& gray_image, const std::vector<float>& gamma_values);
 cv::Mat create_contrast_mask(const cv::Mat& original_image, const cv::Mat& adjusted_image);
@@ -44,6 +46,19 @@ std::pair<cv::Mat, cv::Mat> unsharp_mask(const cv::Mat& image, float alpha = 1.0
 cv::Mat image_agcwd(const cv::Mat& img, double a = 0.25, bool truncated_cdf = false);
 cv::Mat process_bright(const cv::Mat& img);
 cv::Mat process_dimmed(const cv::Mat& img);
+/**
+ * @brief Processes an image by adjusting its brightness based on a specified threshold and expected mean value.
+ * 
+ * This function analyzes the brightness of the input image and applies adjustments to ensure the brightness
+ * is closer to the expected mean value. It is useful for normalizing image brightness in computer vision tasks.
+ * 
+ * @param img The input image to be processed. It should be a valid cv::Mat object.
+ * @param threshold A double value representing the threshold for brightness adjustment. Default is 0.3.
+ *                  This value determines the sensitivity of the adjustment.
+ * @param expectedMean A double value representing the expected mean brightness of the image. Default is 112.0.
+ *                     The function adjusts the image brightness to approach this mean value.
+ * @return cv::Mat The processed image with adjusted brightness.
+ */
 cv::Mat process_image_based_on_brightness(const cv::Mat& img, double threshold = 0.3, double expectedMean = 112.0);
 
 int main(int argc, char **argv)
@@ -99,7 +114,7 @@ int main(int argc, char **argv)
     int fps = 20;
     float dT = 1.f / fps;
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::MONOCULAR, false);
+    ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::MONOCULAR, true);
     float imageScale = SLAM.GetImageScale();
 
     double t_resize = 0.f;
@@ -120,9 +135,6 @@ int main(int argc, char **argv)
 
             // tag-change
             // cv::Mat adjusted_image= adaptive_gamma_adjustment(im, 1.9, 0.5);
-            // cv::Mat adjusted_image= gamma_result.first;
-            // cv::Mat sharpened_image = unsharp_mask(adjusted_image, 1.5).first;
-            // im=sharpened_image;
 
             cv::Mat adjusted_image = process_image_based_on_brightness(im, 0.3, 50.0);
             cv::Mat contrast_mask =  create_contrast_mask(im,adjusted_image);
@@ -227,8 +239,8 @@ int main(int argc, char **argv)
     // Save camera trajectory
     if (bFileName)
     {
-        const string kf_file = "results/kf_" + string(argv[argc - 1]) + ".txt";
-        const string f_file = "results/f_" + string(argv[argc - 1]) + ".txt";
+        const string kf_file = "results/" + string(argv[argc - 1]) +"_kf" + ".txt";
+        const string f_file = "results/" + string(argv[argc - 1]) + "_f" + ".txt";
         SLAM.SaveTrajectoryEuRoC(f_file);
         SLAM.SaveKeyFrameTrajectoryEuRoC(kf_file);
     }
@@ -265,15 +277,36 @@ void LoadImages(const string &strImagePath, const string &strPathTimes,
 
 }
 
+/**
+ * @brief Calculates the normalized histogram of an input image.
+ * 
+ * This function computes the histogram of a single-channel image and normalizes it
+ * so that the sum of all bins equals 1. The histogram represents the distribution
+ * of pixel intensity values in the image.
+ * 
+ * @param image The input image (single-channel, e.g., grayscale) for which the histogram is calculated.
+ *              It must be of type CV_8U (8-bit unsigned integer).
+ * 
+ * @return cv::Mat A 1D matrix (vector) representing the normalized histogram of the input image.
+ *                 The size of the matrix is equal to the number of bins (256 by default).
+ * 
+ * @note The function assumes the input image is a grayscale image with intensity values
+ *       in the range [0, 255]. If the input image has a different type or range, the behavior
+ *       may be undefined.
+ * 
+ * @warning The input image must not be empty. Passing an empty image will result in an error.
+ */
 cv::Mat calculate_histogram(const cv::Mat& image) {
     cv::Mat hist;
 
-    int histSize = 256;                
-    float range[] = {0.0f, 256.0f};   
-    const float* histRange = range;    
+    int histSize = 256;                // Number of bins
+    float range[] = {0.0f, 256.0f};    // Range of intensity values
+    const float* histRange = range;    // Pointer to the range array
 
+    // Calculate the histogram of the image
     cv::calcHist(&image, 1, 0, cv::Mat(), hist, 1, &histSize, &histRange);
 
+    // Normalize the histogram to make the sum of all bins equal to 1
     hist /= cv::sum(hist)[0];
 
     return hist;
@@ -302,47 +335,7 @@ cv::Mat create_contrast_mask(const cv::Mat& original_image, const cv::Mat& adjus
     cv::subtract(adjusted_image, original_image, contrast_mask);
     return contrast_mask;
 }
-cv::Mat adaptive_gamma_adjustment(const cv::Mat& image, float alpha , float tau ) {
-    cv::Mat gray_image;
-    if (image.channels() == 1) {  
-        gray_image = image;
-    } else {
-        cv::cvtColor(image, gray_image, cv::COLOR_BGR2GRAY); 
-    }
-    
-    cv::Mat hist = calculate_histogram(gray_image);
-    
-    int n = gray_image.total();
-    std::vector<float> P_i(hist.rows);
-    for (int i = 0; i < hist.rows; ++i) {
-        P_i[i] = hist.at<float>(i, 0) * (1.0f / n);
-    }
-    
-    float P_max = *std::max_element(P_i.begin(), P_i.end());
-    
-    float P_min = *std::min_element(P_i.begin(), P_i.end());
-    
-    std::vector<float> P_w(P_i.size());
-    
-    for (size_t i = 0; i < P_i.size(); ++i) {
-        P_w[i] = P_max * std::pow((P_i[i] - P_min) / (P_max - P_min), alpha);
-    }
-    
-    std::vector<float> C_w(P_w.size());
-    std::partial_sum(P_w.begin(), P_w.end(), C_w.begin());
-    float total_Pw = std::accumulate(P_w.begin(), P_w.end(), 0.0f);
-    for (float& cw : C_w) {
-        cw /= total_Pw;
-    }
-    
-    std::vector<float> gamma_values(C_w.size());
-    for (size_t i = 0; i < C_w.size(); ++i) {
-        gamma_values[i] = std::max(tau, 1.0f - C_w[i]);
-    }
-    cv::Mat adjusted_image = adjust_gamma(gray_image, gamma_values);
 
-    return adjusted_image;
-}
 
 std::pair<cv::Mat, cv::Mat> unsharp_mask(const cv::Mat& image, float alpha) {
     cv::Mat blurred, Gmask, I_unsharpened;
@@ -441,4 +434,46 @@ cv::Mat process_image_based_on_brightness(const cv::Mat& img, double threshold, 
     } else {
         return img;
     }
+}
+
+cv::Mat adaptive_gamma_adjustment(const cv::Mat& image, float alpha , float tau ) {
+    cv::Mat gray_image;
+    if (image.channels() == 1) {  
+        gray_image = image;
+    } else {
+        cv::cvtColor(image, gray_image, cv::COLOR_BGR2GRAY); 
+    }
+    
+    cv::Mat hist = calculate_histogram(gray_image);
+    
+    int n = gray_image.total();
+    std::vector<float> P_i(hist.rows);
+    for (int i = 0; i < hist.rows; ++i) {
+        P_i[i] = hist.at<float>(i, 0) * (1.0f / n);
+    }
+    
+    float P_max = *std::max_element(P_i.begin(), P_i.end());
+    
+    float P_min = *std::min_element(P_i.begin(), P_i.end());
+    
+    std::vector<float> P_w(P_i.size());
+    
+    for (size_t i = 0; i < P_i.size(); ++i) {
+        P_w[i] = P_max * std::pow((P_i[i] - P_min) / (P_max - P_min), alpha);
+    }
+    
+    std::vector<float> C_w(P_w.size());
+    std::partial_sum(P_w.begin(), P_w.end(), C_w.begin());
+    float total_Pw = std::accumulate(P_w.begin(), P_w.end(), 0.0f);
+    for (float& cw : C_w) {
+        cw /= total_Pw;
+    }
+    
+    std::vector<float> gamma_values(C_w.size());
+    for (size_t i = 0; i < C_w.size(); ++i) {
+        gamma_values[i] = std::max(tau, 1.0f - C_w[i]);
+    }
+    cv::Mat adjusted_image = adjust_gamma(gray_image, gamma_values);
+
+    return adjusted_image;
 }
