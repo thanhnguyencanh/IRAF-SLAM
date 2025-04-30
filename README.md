@@ -1,10 +1,10 @@
 # IRAF-SLAM
 
 ### V1.0, April 16th, 2025
-**Authors:** [Thanh Nguyen Canh](https://thanhnguyencanh.github.io/), Bao Nguyen Quoc, HaoLan Zhang, [Xiem HoangVan](https://sites.google.com/site/xiemhoang/), [Nak Young Chong](https://www.jaist.ac.jp/robot/).
+**Authors:** [Thanh Nguyen Canh](https://thanhnguyencanh.github.io/), Bao Nguyen Quoc, HaoLan Zhang, Bupesh Rethinam Veeraiah, [Xiem HoangVan](https://sites.google.com/site/xiemhoang/), [Nak Young Chong](https://www.jaist.ac.jp/robot/).
 
 
-IRAF-SLAM is ...
+IRAF-SLAM is an Illumination-Robust and Adaptive Feature-Culling front-end designed to enhance vSLAM resilience in complex and challenging environments.
 
 
 
@@ -15,7 +15,7 @@ If you use IRAF-SLAM in an academic work, please cite:
   
     @article{thanh_IRAF-SLAM,
       title={IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments},
-      author={Thanh Nguyen Canh, Bao Nguyen Quoc, HaoLan Zhang, Xiem HoangVan, and Nak Young Chong},
+      author={Thanh Nguyen Canh, Bao Nguyen Quoc, HaoLan Zhang, Bupesh Rethinam Veeraiah, Xiem HoangVan, and Nak Young Chong},
       journal={}, 
       volume={},
       number={},
@@ -70,27 +70,20 @@ First, we test with [EuRoC dataset](http://projects.asl.ethz.ch/datasets/doku.ph
 ./euroc_run.sh
 ```
 
-Evaluation
+
+
+# 5. TUM-VI Examples
+[TUM-VI dataset](https://vision.in.tum.de/data/datasets/visual-inertial-dataset) was recorded with two fisheye cameras and an inertial sensor. So please download and modify the directory in the script "tum_run.sh"
+
 ```
-./euroc_evaluation.sh
-```
-
-<!-- # 6. TUM-VI Examples
-[TUM-VI dataset](https://vision.in.tum.de/data/datasets/visual-inertial-dataset) was recorded with two fisheye cameras and an inertial sensor.
-
-1. Download a sequence from https://vision.in.tum.de/data/datasets/visual-inertial-dataset and uncompress it.
-
-2. Open the script "tum_vi_examples.sh" in the root of the project. Change **pathDatasetTUM_VI** variable to point to the directory where the dataset has been uncompressed. 
-
-3. Execute the following script to process all the sequences with all sensor configurations:
-```
-./tum_vi_examples
+./tum_run.sh
 ```
 
-## Evaluation
+# 6. Evaluation
 In TUM-VI ground truth is only available in the room where all sequences start and end. As a result the error measures the drift at the end of the sequence. 
 
 Execute the following script to process sequences and compute the RMS ATE:
 ```
-./tum_vi_eval_examples
-``` -->
+./evo_eval.sh
+./evo_ape.sh
+```
