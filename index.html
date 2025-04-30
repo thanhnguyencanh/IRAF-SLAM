@@ -1,0 +1,543 @@
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10550309-8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10550309-8');
+</script>
+
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+
+<style type="text/css">
+    body {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight:300;
+        font-size:18px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 1100px;
+    }
+
+    h1 {
+        font-weight:300;
+    }
+
+    .disclaimerbox {
+        background-color: #eee;
+        border: 1px solid #eeeeee;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+        padding: 20px;
+    }
+
+    video.header-vid {
+        height: 140px;
+        border: 1px solid black;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+    }
+
+    img.header-img {
+        height: 140px;
+        border: 1px solid black;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+    }
+
+    img.rounded {
+        border: 1px solid #eeeeee;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+    }
+
+    a:link,a:visited
+    {
+        color: #1367a7;
+        text-decoration: none;
+    }
+    a:hover {
+        color: #208799;
+    }
+
+    td.dl-link {
+        height: 160px;
+        text-align: center;
+        font-size: 22px;
+    }
+
+    .layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+        box-shadow:
+                0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+                5px 5px 0 0px #fff, /* The second layer */
+                5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+                10px 10px 0 0px #fff, /* The third layer */
+                10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */
+                15px 15px 0 0px #fff, /* The fourth layer */
+                15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */
+                20px 20px 0 0px #fff, /* The fifth layer */
+                20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */
+                25px 25px 0 0px #fff, /* The fifth layer */
+                25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+        margin-left: 10px;
+        margin-right: 45px;
+    }
+
+
+    .layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+        box-shadow:
+                0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+                5px 5px 0 0px #fff, /* The second layer */
+                5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+                10px 10px 0 0px #fff, /* The third layer */
+                10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+        margin-top: 5px;
+        margin-left: 10px;
+        margin-right: 30px;
+        margin-bottom: 5px;
+    }
+
+    .vert-cent {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    hr
+    {
+        border: 0;
+        height: 1.5px;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    }
+</style>
+
+<html>
+  <head>
+        <title> IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments</title>
+        <meta property="og:title" content="SE3HamDL" />
+        <meta property="og:image" content="" />
+        <meta property="og:url" content="" />
+      <style>
+code {
+  font-family: Consolas,"courier new";
+  color: darkcyan;
+  background-color: #f1f1f1;
+  padding: 2px;
+  font-size: 105%;
+}
+</style>
+  </head>
+
+  <body>
+    <br>
+    <center>
+    <span style="font-size:42px"> IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments</span>
+    
+    </center>
+
+    <br><br>
+      <table align=center width=1000px>
+       <tr>
+         <td align=center width=180px>
+         <center>
+         <span style="font-size:20px"><a href="https://thanhnguyencanh.github.io/">Thanh Nguyen Canh</a></span>
+         </center>
+         </td>
+
+         <td align=center width=180px>
+         <center>
+         <span style="font-size:20px"> Bao Nguyen Quoc </span>
+         </center>
+         </td>
+
+         <td align=center width=150px>
+          <center>
+          <span style="font-size:20px"> HaoLan Zhang</span>
+          </center>
+          </td>
+
+         <td align=center width=180px>
+          <center>
+          <span style="font-size:20px">Bupesh Rethinam Veeraiah</span>
+          </center>
+          </td>
+
+         <td align=center width=150px>
+         <center>
+         <span style="font-size:20px"><a href="https://sites.google.com/site/xiemhoang/home?authuser=0">Xiem HoangVan</a></span>
+         </center>
+         </td>
+
+        <td align=center width=150px>
+          <center>
+          <span style="font-size:20px"><a href="https://www.jaist.ac.jp/robot/">Nak Young Chong</a></span>
+          </center>
+          </td>
+     </tr>
+    </table>
+
+    <table align=center width=700px>
+       <tr>
+        <td align=center width=100px>
+        <center>
+        <span style="font-size:20px">School of Information Science, JAIST, Japan <br> VNU University of Engineering and Technology, Vietnam <br/><a href="https://ecmr2025.dei.unipd.it/">ECMR</a>, 2025.</span>
+        </center>
+        </td>
+     </tr>
+    </table>
+
+    <br>
+
+    <table align=center width=500px>
+     <tr>
+       <td align=center width=100px>
+       <center>
+       <span style="font-size:20px"><a href="">[Paper]</a></span>
+       </center>
+       </td>
+       <td align=center width=100px>
+       <center>
+       <span style="font-size:20px"><a href="https://github.com/thanhnguyencanh/IRAF-SLAM">[Code]</a></span>
+       </center>
+       </td>
+    
+   </tr>
+  </table>
+
+            <br>
+            
+
+            <br>
+            Robust Visual SLAM (vSLAM) is essential for autonomous systems operating in real-world environments, where challenges such as dynamic objects, low texture, and critically, varying illumination conditions often degrade performance. Existing feature-based SLAM systems rely on fixed front-end parameters, making them vulnerable to sudden lighting changes and unstable feature tracking. To address these challenges, we propose ``IRAF-SLAM''', an Illumination-Robust and Adaptive Feature-Culling front-end designed to enhance vSLAM resilience in complex and challenging environments. Our approach introduces: (1) an image enhancement scheme to preprocess and adjust image quality under varying lighting conditions; (2) an adaptive feature extraction mechanism that dynamically adjusts detection sensitivity based on image entropy, pixel intensity, and gradient analysis; and (3) a feature culling strategy that filters out unreliable feature points using density distribution analysis and a lighting impact factor. Comprehensive evaluations on the TUM and European Robotics Challenge (EuRoC) datasets demonstrate that IRAF-SLAM significantly reduces tracking failures and achieves superior trajectory accuracy compared to state-of-the-art vSLAM methods under adverse illumination conditions. These results highlight the effectiveness of adaptive front-end strategies in improving vSLAM robustness without incurring significant computational overhead.
+            <br><br>
+
+      <hr>
+               <!-- <table align=center width=550px> -->
+            <table align=center width=900>
+             <center><h1>Paper</h1></center>
+                <tr>
+                    <!--<td width=300px align=left>-->
+                    <!-- <a href="http://arxiv.org/pdf/1603.08511.pdf"> -->
+                  <!-- <td><a href="#"><img class="layered-paper-big" style="height:175px" src="./resources/images/paper.png"/></a></td> -->
+                  <td><a href="https://arxiv.org/pdf/2401.08134"><img style="height:400px" src="docs/images/thumbnails1.png"/></a></td>
+                  <td><span style="font-size:14pt">Thanh Nguyen Canh, Van-Truong Nguyen, Xiem HoangVan, Armagan Elibol, Nak Young Chong<br><br>
+                     IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments<br><br>
+                  Submitted to ECMR 2025.<br><br>
+                      <a href="">[pdf]</a> &nbsp; &nbsp;
+                   <!--    <a href="./resources/bibtex.txt">[Bibtex]</a> -->
+                  <!-- [hosted on <a href="#">arXiv</a>]</a> -->
+                    </td>
+              </tr>
+            </table>
+      
+
+      
+      
+                <!-- <hr>
+                <center><h1>Overview and Results</h1></center>
+                <table align=center width=900px>
+                    <tr>
+                        <td width=600px>
+                          <center>
+                            <div class = "video">
+                                <iframe width="900" height="540" src="https://www.youtube.com/embed/p_5nGipiVlw?si=0JPksQIcDpilhVTi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                           </div>
+                        </center>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+          <hr> -->
+          <hr>
+                <center><h1>Overview and Results</h1></center>
+                <table align=center width=900px>
+                    <tr>
+                        <td width=600px>
+                          <center>
+                            <video  width="900" muted autoplay loop>
+                              <source src="docs/mp4/sim.mp4" type="video/mp4">
+                              Your browser does not support the video tag.
+                              </video>
+                        </center>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+          <hr>
+         <!-- <table align=center width=550px> -->
+            <!-- <table align=center width=800>
+             <center><h1>Overview</h1></center>
+                <tr>
+                    <br> -->
+<!--
+            <td width=600px>
+                      <center>
+                          <span style="font-size:28px">Settings
+                          <br>
+                          <br>
+                    </center>
+                    </td>
+-->
+            <!-- <br>
+            <table align=center width=900px>
+                <tr>
+                    <td width=900px>
+                      <center>
+                          <a href="docs/images/ProposedSystem.png"><img src = "docs/images/ProposedSystem.png" width="900px"></img></href></a><br>
+                    </center>
+                    </td>
+                </tr>
+                    <td width=900px>
+                      <center>
+                          <span style="font-size:18px"><i> Proposed S3M SLAM Architecture: The system is composed of three units: a full 6 DoF pose estimation of the drone, a 3D semantic segmentation branch, and a semantic fusion scheme.</i>
+                    </center>
+                    </td>
+                </tr>
+            </table>
+                    <br><br>
+                    <table align=center width=900px>
+                <tr>
+                    <td width=600px>
+                      <center>
+                          <a href="docs/images/poseEst.png"><img src = "docs/images/poseEst.png" width="800px"></img></href></a><br>
+                    </center>
+                    </td>
+                </tr>
+                    <td width=900px>
+                      <center>
+                          <span style="font-size:18px"><i>3D Pose Estimation.</i>
+                    </center>
+                    </td>
+                </tr>
+            </table>
+                <br><br>
+                    <table align=center width=600px>
+                <tr>
+                    <td width=900px>
+                      <center>
+                          <a href="docs/images/semseg.png"><img src = "docs/images/semseg.png" width="800px"></img></href></a><br>
+                    </center>
+                    </td>
+                </tr>
+                    <td width=900px>
+                      <center>
+                          <span style="font-size:18px"><i>Structure and method for semantic extraction</i>
+                    </center>
+                    </td>
+                </tr>
+            </table>
+            <br><br>
+                <table align=center width=600px>
+                <tr>
+                    <td width=900px>
+                      <center>
+                          <a href="docs/images/fusion.png"><img src = "docs/images/fusion.png" width="900px"></img></href></a><br>
+                    </center>
+                    </td>
+                </tr>
+                    <td width=900px>
+                      <center>
+                          <span style="font-size:18px"><i> To fuse semantic information from multiple view, we introduced semantic fusion scheme.</i>
+                    </center>
+                    </td>
+                </tr>
+            </table>
+           
+            <br>
+            <table align=center width=800>
+                
+                <hr>
+             <center><h1>Experiments</h1></center> -->
+<!--
+                <tr>
+<table align=center width=900px>
+                <tr>
+                    <td width=900px>
+                      <center>
+                    <a href="./resources/gif/gym_state_control.gif"><img src = "./resources/gif/gym_state_control.gif" width="440px"></img></href></a>
+                    <a href="./resources/gif/gym_animation_control.gif"><img src = "./resources/gif/gym_animation_control.gif" width="440px"></img></href></a>
+                    
+                    
+                    <br>
+                    </center>
+                    </td>
+                </tr>
+                    <td width=900px>
+                      <center>
+                          <span style="font-size:18px"><i> For pendulum, we collect data by applying random control on a pendulum gym simulator. After learning the dynamics from data, we design an energy-based controller to drive the pendulum toward the upright position using the learned dynamics function.</i>
+                    </center>
+                    </td>
+                </tr>
+-->
+            <!-- </table>
+            <br><br>
+                <table align=center width=900px>
+                <tr>
+                    <td width=900px>
+                      <center>
+                          <a href="docs/images/tpe.png"><img src = "docs/images/tpe.png" width="800px"></img></href></a><br> -->
+<!--
+                    <a href="./resources/gif/data1.gif"><img src = "./resources/gif/data1.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data2.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data11.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data15.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data14.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data13.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data18.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data21.gif" width="260px"></img></href></a>
+                    <a href="./resources/gif/data2.gif"><img src = "./resources/gif/data4.gif" width="260px"></img></href></a>
+-->
+                <!-- <video  width="440" muted autoplay loop>
+                <source src="resources/images/data_1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+                </video>
+                         <a href="./resources/images/Drone1.jpg"><img src = "./resources/images/Drone1.jpg" width="440px"></img></href></a> 
+                    <br>
+                                          <video  width="440" muted autoplay loop>
+                <source src="resources/images/data_2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+                </video>
+                                          <video  width="440" muted autoplay loop>
+                <source src="resources/images/data_3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+                </video> -->
+
+                    <!-- </center>
+                    </td>
+                </tr>
+                    <td width=900px>
+                      <center>
+                          <span style="font-size:18px"><i> Comparison of trajectory for ORB-SLAM2, Our system and ground truth in X-Y and X-Z axis.</i>
+                    </center>
+                    </td>
+                </tr> 
+            </table>
+
+            <br><br>
+            <table align=center width=600px>
+            <tr>
+                <td width=900px>
+                  <center>
+                      <a href="docs/images/rpe.png"><img src = "docs/images/rpe.png" width="600px"></img></href></a><br>
+                </center>
+                </td>
+            </tr>
+                <td width=900px>
+                  <center>
+                      <span style="font-size:18px"><i> Comparison of Relative Rose Error (RPE) between ORB-SLAM2 and our system.</i>
+                </center>
+                </td>
+            </tr>
+            </table>
+
+            <br><br>
+            <table align=center width=600px>
+            <tr>
+                <td width=900px>
+                  <center>
+                      <a href="docs/images/visual.png"><img src = "docs/images/visual.png" width="800px"></img></href></a><br>
+                </center>
+                </td>
+            </tr>
+                <td width=900px>
+                  <center>
+                      <span style="font-size:18px"><i> 3D visual representation of the obtained semantic maps.</i>
+                </center>
+                </td>
+            </tr>
+        </table>
+            
+        <hr>
+         <center><h1>Code</h1></center>
+            <table align=center width=800px>
+              <tr><center> <br>
+                <span style="font-size:28px">&nbsp;<a href='https://github.com/thanhnguyencanh/S3M_SLAM'>[github]</a>
+
+                <span style="font-size:28px"></a></span>
+              <br>
+              </center></tr>
+          </table>
+            <br>
+          <hr> -->
+
+         <center><h1>Citation</h1></center>
+            <table align=center width=800px>
+              <!-- <tr><center> <br>
+                          <span style="font-size:18px"><i>If you find our papers/code useful for your research, please cite our work as follows. </i>
+                              <br>
+              </center></tr>
+              <tr><left> <br>
+                          <span style="font-size:18px">1.  T. Duong, A. Altawaitan, J. Stanley, N. Atanasov. <a href='https://thaipduong.github.io/LieGroupHamDL/'>Port-Hamiltonian Neural ODE Networks on Lie Groups For Robot Dynamics Learning and Control</a>. under review, 2023.
+
+                          
+              <br><br>
+                              <code>@article{duong23porthamiltonian, 
+                                  <br>
+                                    author    = {Thai Duong, Abdullah Altawaitan, Jason Stanley AND Nikolay Atanasov}, 
+                                  <br>
+                                    title     = {Port-{H}amiltonian Neural {ODE} Networks on Lie Groups For Robot Dynamics Learning and Control}, 
+                                  <br>
+                                    journal = {arXiv preprint arXiv:2401.09520}, 
+                                  <br>
+                                    year      = {2023}, 
+                                  <br>
+
+                                } 
+                              </code>
+              </left></tr>
+                  <br>
+              <br>
+              </center></tr> -->
+              <tr><left> <br>
+                          <span style="font-size:18px">1.  Canh T. N., Quoc N. B., Zhang H., Bupesh R.V. HoangVan X., Chong A.Y. <a href='https://thanhnguyencanh.github.io/S3M_SLAM/'> IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments</a>. submitted to European Conference on Mobile Robots (ECMR), 2025.
+
+                          
+              <br><br>
+                              <code>@inproceedings{canh2025s3m, 
+                                  <br>
+                                    author    = {Canh, Thanh Nguyen and Quoc, Bao Nguyen and Zhang, Hao Lan and Veeraiah, Bupesh Rethinam and HoangVan, Xiem and Chong, Nak Young}, 
+                                  <br>
+                                    title     = {{ IRAF-SLAM: An Illumination-Robust and Adaptive Feature-Culling Front-End for Visual SLAM in Challenging Environments}}, 
+                                  <br>
+                                    booktitle = {)}, 
+                                  <br>
+                                    year      = {2025}, 
+                                  <br>
+                                    address   = {}, 
+                                  <br>
+                                    month     = {}, 
+                                  <br>
+                                    DOI       = {}
+                                  <br>
+                                } 
+                              </code>
+              </left></tr>
+                  <br><br>
+              
+          </table>
+            <br>
+          <hr>
+
+            <table align=center width=1100px>
+                <tr>
+                    <td>
+                      <left>
+                <center><h1>Acknowledgements</h1></center>
+                This work was supported by JST SPRING, Japan Grant Number JPMJSP2102.
+                <br>
+                This webpage template was borrowed from <a href="https://akanazawa.github.io/cmr/">https://akanazawa.github.io/cmr/</a>.
+            </left>
+        </td>
+        </tr>
+        </table>
+<div style="display:inline-block;width:200px;"><script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5ho5yi7e4v7&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script></div>
+
+        <br><br>
+</body>
+</html>
