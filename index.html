@@ -179,7 +179,7 @@
 
       <td align=center width=150px>
         <center>
-          <span style</td>="font-size:20px"> HaoLan Zhang</span>
+          <span style="font-size:20px"> HaoLan Zhang</span>
         </center>
       </td>
 
@@ -362,21 +362,15 @@
           <tr>
             <td width=900px>
               <center>
-                <a href="./resources/gif/gym_state_control.gif"><img src="./resources/gif/gym_state_control.gif"
-                    width="440px"></img></href></a>
-                <a href="./resources/gif/gym_animation_control.gif"><img src="./resources/gif/gym_animation_control.gif"
-                    width="440px"></img></href></a>
-
-
+                <a href="docs/images/FastThreshold.png"><img src="docs//images/FastThreshold.png"
+                    width="900px"></img></href></a>
                 <br>
               </center>
             </td>
           </tr>
           <td width=900px>
             <center>
-              <span style="font-size:18px"><i> For pendulum, we collect data by applying random control on a pendulum
-                  gym simulator. After learning the dynamics from data, we design an energy-based controller to drive
-                  the pendulum toward the upright position using the learned dynamics function.</i>
+              <span style="font-size:18px"><i> Number of Keypoints based on FAST threshold on LoL low-light dataset.</i>
             </center>
           </td>
       </tr>
@@ -414,13 +408,18 @@
                 Your browser does not support the video tag.
                 </video> -->
 
-      </center>
-      </td>
+    <br><br>
+    <table align=center width=600px>
+      <tr>
+        <td width=900px>
+          <center>
+            <a href="docs/images/ORB_SLAM3_Feature.png"><img src="docs/images/OurFeature.png" width="440px"></img></href></a><br>
+          </center>
+        </td>
       </tr>
       <td width=900px>
         <center>
-          <span style="font-size:18px"><i> Comparison of trajectory for ORB-SLAM2, Our system and ground truth in X-Y
-              and X-Z axis.</i>
+          <span style="font-size:18px"><i> The example of feature extraction results: ORB-SLAM3(lef), Our method (right).</i>
         </center>
       </td>
       </tr>
@@ -431,35 +430,28 @@
       <tr>
         <td width=900px>
           <center>
-            <a href="docs/images/rpe.png"><img src="docs/images/rpe.png" width="600px"></img></href></a><br>
+            <a href="docs/images/ORB_SLAM3Matching.png"><img src="docs/images/OurMatching.png" width="440px"></img></href></a><br>
           </center>
         </td>
       </tr>
       <td width=900px>
         <center>
-          <span style="font-size:18px"><i> Comparison of Relative Rose Error (RPE) between ORB-SLAM2 and our system.</i>
+          <span style="font-size:18px"><i> The example of feature matching results: ORB-SLAM3(lef), Our method (right).</i>
         </center>
       </td>
       </tr>
     </table>
 
-    <br><br>
-    <table align=center width=600px>
-      <tr>
-        <td width=900px>
-          <center>
-            <a href="docs/images/visual.png"><img src="docs/images/visual.png" width="800px"></img></href></a><br>
-          </center>
-        </td>
-      </tr>
-      <td width=900px>
-        <center>
-          <span style="font-size:18px"><i> 3D visual representation of the obtained semantic maps.</i>
-        </center>
-      </td>
-      </tr>
-    </table>
 
+
+    <hr>
+    <center>
+      <h1>Additional Results</h1>
+    </center>
+
+
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <hr>
     <center>
       <h1>Code</h1>
@@ -477,36 +469,11 @@
     <br>
     <hr>
 
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <center>
       <h1>Citation</h1>
     </center>
     <table align=center width=800px>
-      <!-- <tr><center> <br>
-                          <span style="font-size:18px"><i>If you find our papers/code useful for your research, please cite our work as follows. </i>
-                              <br>
-              </center></tr>
-              <tr><left> <br>
-                          <span style="font-size:18px">1.  T. Duong, A. Altawaitan, J. Stanley, N. Atanasov. <a href='https://thaipduong.github.io/LieGroupHamDL/'>Port-Hamiltonian Neural ODE Networks on Lie Groups For Robot Dynamics Learning and Control</a>. under review, 2023.
-
-                          
-              <br><br>
-                              <code>@article{duong23porthamiltonian, 
-                                  <br>
-                                    author    = {Thai Duong, Abdullah Altawaitan, Jason Stanley AND Nikolay Atanasov}, 
-                                  <br>
-                                    title     = {Port-{H}amiltonian Neural {ODE} Networks on Lie Groups For Robot Dynamics Learning and Control}, 
-                                  <br>
-                                    journal = {arXiv preprint arXiv:2401.09520}, 
-                                  <br>
-                                    year      = {2023}, 
-                                  <br>
-
-                                } 
-                              </code>
-              </left></tr>
-                  <br>
-              <br>
-              </center></tr> -->
       <tr>
         <left> <br>
           <span style="font-size:18px">1. Canh T. N., Quoc N. B., Zhang H., Bupesh R.V. HoangVan X., Chong A.Y. <a
