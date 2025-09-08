@@ -1,0 +1,12 @@
+<package>
+  <description brief="IRAF_SLAM">
+     IRAF_SLAM
+  </description>
+  <author>Thanh Nguyen Canh</author>
+  <license>GPLv3</license>
+  <depend package="roscpp"/>
+  <depend package="tf"/>
+  <depend package="sensor_msgs"/>
+  <depend package="image_transport"/>
+  <depend package="cv_bridge"/>
+</package>
