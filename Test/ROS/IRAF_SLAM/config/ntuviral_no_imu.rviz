@@ -85,7 +85,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/Image
       Enabled: true
-      Image Topic: /orb_slam3/tracking_image
+      Image Topic: /iraf_slam/tracking_image
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -118,7 +118,7 @@ Visualization Manager:
       Size (Pixels): 5
       Size (m): 0.029999999329447746
       Style: Spheres
-      Topic: /orb_slam3/tracked_points
+      Topic: /iraf_slam/tracked_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
@@ -146,14 +146,14 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Flat Squares
-      Topic: /orb_slam3/all_points
+      Topic: /iraf_slam/all_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /orb_slam3/kf_markers
+      Marker Topic: /iraf_slam/kf_markers
       Name: kf markers
       Namespaces:
         kf_markers: true
@@ -180,7 +180,7 @@ Visualization Manager:
       Radius: 0.029999999329447746
       Shaft Diameter: 0.10000000149011612
       Shaft Length: 0.10000000149011612
-      Topic: /orb_slam3_ros/trajectory
+      Topic: /iraf_slam_ros/trajectory
       Unreliable: false
       Value: true
   Enabled: true
