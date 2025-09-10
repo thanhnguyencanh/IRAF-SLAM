@@ -1,21 +1,22 @@
 /**
-* 
-* Common functions and variables across all modes (mono/stereo, with or w/o imu)
-*
-*/
+ *
+ * Common functions and variables across all modes (mono/stereo, with or w/o imu)
+ *
+ */
 
 #include "common.h"
 
 // Variables for ORB-SLAM3
-ORB_SLAM3::System* pSLAM;
+ORB_SLAM3::System *pSLAM;
 ORB_SLAM3::System::eSensor sensor_type = ORB_SLAM3::System::NOT_SET;
 
 // Variables for ROS
-std::string world_frame_id, cam_frame_id, imu_frame_id;
+std::string world_frame_id, cam_frame_id, imu_frame_id, cam_to_world;
 ros::Publisher pose_pub, odom_pub, kf_markers_pub;
 ros::Publisher tracked_mappoints_pub, all_mappoints_pub;
 ros::Publisher tracked_keypoints_pub;
 image_transport::Publisher tracking_img_pub;
+tf::Transform cam_to_world_offset;
 
 //////////////////////////////////////////////////
 // Main functions
@@ -38,14 +39,19 @@ bool save_traj_srv(iraf_slam_ros::SaveMap::Request &req, iraf_slam_ros::SaveMap:
     const string cam_traj_file = req.name + "_cam_traj.txt";
     const string kf_traj_file = req.name + "_kf_traj.txt";
 
-    try {
+    try
+    {
         pSLAM->SaveTrajectoryEuRoC(cam_traj_file);
         pSLAM->SaveKeyFrameTrajectoryEuRoC(kf_traj_file);
         res.success = true;
-    } catch (const std::exception &e) {
+    }
+    catch (const std::exception &e)
+    {
         std::cerr << e.what() << std::endl;
         res.success = false;
-    } catch (...) {
+    }
+    catch (...)
+    {
         std::cerr << "Unknows exeption" << std::endl;
         res.success = false;
     }
@@ -82,16 +88,16 @@ void setup_publishers(ros::NodeHandle &node_handler, image_transport::ImageTrans
     }
 }
 
-void publish_topics(ros::Time msg_time, Eigen::Vector3f Wbb)
+void publish_topics(ros::Time msg_time, tf::Transform cam_to_world_offset, Eigen::Vector3f Wbb)
 {
     Sophus::SE3f Twc = pSLAM->GetCamTwc();
 
-    if (Twc.translation().array().isNaN()[0] || Twc.rotationMatrix().array().isNaN()(0,0)) // avoid publishing NaN
+    if (Twc.translation().array().isNaN()[0] || Twc.rotationMatrix().array().isNaN()(0, 0)) // avoid publishing NaN
         return;
-    
+
     // Common topics
     publish_camera_pose(Twc, msg_time);
-    publish_tf_transform(Twc, world_frame_id, cam_frame_id, msg_time);
+    publish_tf_transform(Twc, cam_to_world_offset, world_frame_id, cam_frame_id, msg_time);
 
     publish_tracking_img(pSLAM->GetCurrentFrame(), msg_time);
 
@@ -112,7 +118,7 @@ void publish_topics(ros::Time msg_time, Eigen::Vector3f Wbb)
         Sophus::Matrix3f Rwb = Twb.rotationMatrix();
         Eigen::Vector3f Wwb = Rwb * Wbb;
 
-        publish_tf_transform(Twb, world_frame_id, imu_frame_id, msg_time);
+        publish_tf_transform(Twb, cam_to_world_offset, world_frame_id, imu_frame_id, msg_time);
         publish_body_odom(Twb, Vwb, Wwb, msg_time);
     }
 }
@@ -162,9 +168,9 @@ void publish_camera_pose(Sophus::SE3f Tcw_SE3f, ros::Time msg_time)
     pose_pub.publish(pose_msg);
 }
 
-void publish_tf_transform(Sophus::SE3f T_SE3f, string frame_id, string child_frame_id, ros::Time msg_time)
+void publish_tf_transform(Sophus::SE3f T_SE3f, tf::Transform cam_to_world_offset, string frame_id, string child_frame_id, ros::Time msg_time)
 {
-    tf::Transform tf_transform = SE3f_to_tfTransform(T_SE3f);
+    tf::Transform tf_transform = SE3f_to_tfTransform(T_SE3f, cam_to_world_offset);
 
     static tf::TransformBroadcaster tf_broadcaster;
 
@@ -184,8 +190,8 @@ void publish_tracking_img(cv::Mat image, ros::Time msg_time)
     tracking_img_pub.publish(rendered_image_msg);
 }
 
-void publish_keypoints(std::vector<ORB_SLAM3::MapPoint*> tracked_map_points, std::vector<cv::KeyPoint> tracked_keypoints, ros::Time msg_time)
-{   
+void publish_keypoints(std::vector<ORB_SLAM3::MapPoint *> tracked_map_points, std::vector<cv::KeyPoint> tracked_keypoints, ros::Time msg_time)
+{
     std::vector<cv::KeyPoint> finalKeypoints;
 
     int numKFs = tracked_keypoints.size();
@@ -193,42 +199,42 @@ void publish_keypoints(std::vector<ORB_SLAM3::MapPoint*> tracked_map_points, std
     if (tracked_keypoints.empty())
         return;
 
-    for (size_t i = 0; i < tracked_map_points.size(); i++) {
-        if (tracked_map_points[i]) {  // if the MapPoint pointer is not nullptr
+    for (size_t i = 0; i < tracked_map_points.size(); i++)
+    {
+        if (tracked_map_points[i])
+        { // if the MapPoint pointer is not nullptr
             finalKeypoints.push_back(tracked_keypoints[i]);
         }
     }
 
-
     // Create a blank image. Adjust dimensions as per your requirement.
-    //int width = 640;  // Assuming a standard 640x480 size. Change as needed.
-    //int height = 480;
-    //cv::Mat blankImg = cv::Mat::zeros(height, width, CV_8UC3);  // Black image
+    // int width = 640;  // Assuming a standard 640x480 size. Change as needed.
+    // int height = 480;
+    // cv::Mat blankImg = cv::Mat::zeros(height, width, CV_8UC3);  // Black image
 
     // Draw keypoints on the blank image.
-    //cv::drawKeypoints(blankImg, finalKeypoints, blankImg, cv::Scalar(0, 255, 0), cv::DrawMatchesFlags::DEFAULT);
+    // cv::drawKeypoints(blankImg, finalKeypoints, blankImg, cv::Scalar(0, 255, 0), cv::DrawMatchesFlags::DEFAULT);
 
     // Display the image (optional)
-    //cv::imshow("Keypoints", blankImg);
-    //cv::waitKey(1);  
+    // cv::imshow("Keypoints", blankImg);
+    // cv::waitKey(1);
 
     sensor_msgs::PointCloud2 cloud = keypoints_to_pointcloud(finalKeypoints, msg_time);
 
     tracked_keypoints_pub.publish(cloud);
 }
 
-
-void publish_tracked_points(std::vector<ORB_SLAM3::MapPoint*> tracked_points, ros::Time msg_time)
+void publish_tracked_points(std::vector<ORB_SLAM3::MapPoint *> tracked_points, ros::Time msg_time)
 {
     sensor_msgs::PointCloud2 cloud = mappoint_to_pointcloud(tracked_points, msg_time);
-    
+
     tracked_mappoints_pub.publish(cloud);
 }
 
-void publish_all_points(std::vector<ORB_SLAM3::MapPoint*> map_points, ros::Time msg_time)
+void publish_all_points(std::vector<ORB_SLAM3::MapPoint *> map_points, ros::Time msg_time)
 {
     sensor_msgs::PointCloud2 cloud = mappoint_to_pointcloud(map_points, msg_time);
-    
+
     all_mappoints_pub.publish(cloud);
 }
 
@@ -238,7 +244,7 @@ void publish_kf_markers(std::vector<Sophus::SE3f> vKFposes, ros::Time msg_time)
     int numKFs = vKFposes.size();
     if (numKFs == 0)
         return;
-    
+
     visualization_msgs::Marker kf_markers;
     kf_markers.header.frame_id = world_frame_id;
     kf_markers.ns = "kf_markers";
@@ -262,7 +268,7 @@ void publish_kf_markers(std::vector<Sophus::SE3f> vKFposes, ros::Time msg_time)
         kf_marker.z = vKFposes[i].translation().z();
         kf_markers.points.push_back(kf_marker);
     }
-    
+
     kf_markers_pub.publish(kf_markers);
 }
 
@@ -270,13 +276,14 @@ void publish_kf_markers(std::vector<Sophus::SE3f> vKFposes, ros::Time msg_time)
 // Miscellaneous functions
 //////////////////////////////////////////////////
 
-sensor_msgs::PointCloud2 keypoints_to_pointcloud(std::vector<cv::KeyPoint>& keypoints, ros::Time msg_time) {
+sensor_msgs::PointCloud2 keypoints_to_pointcloud(std::vector<cv::KeyPoint> &keypoints, ros::Time msg_time)
+{
     const int num_channels = 3; // x y z
 
     sensor_msgs::PointCloud2 cloud;
 
     cloud.header.stamp = msg_time;
-    cloud.header.frame_id = world_frame_id; 
+    cloud.header.frame_id = world_frame_id;
     cloud.height = 1;
     cloud.width = keypoints.size();
     cloud.is_bigendian = false;
@@ -285,10 +292,10 @@ sensor_msgs::PointCloud2 keypoints_to_pointcloud(std::vector<cv::KeyPoint>& keyp
     cloud.row_step = cloud.point_step * cloud.width;
     cloud.fields.resize(num_channels);
 
+    std::string channel_id[] = {"x", "y", "z"};
 
-    std::string channel_id[] = { "x", "y", "z" };
-
-    for (int i = 0; i < num_channels; i++) {
+    for (int i = 0; i < num_channels; i++)
+    {
         cloud.fields[i].name = channel_id[i];
         cloud.fields[i].offset = i * sizeof(float);
         cloud.fields[i].count = 1;
@@ -299,7 +306,8 @@ sensor_msgs::PointCloud2 keypoints_to_pointcloud(std::vector<cv::KeyPoint>& keyp
 
     unsigned char *cloud_data_ptr = &(cloud.data[0]);
 
-    for (unsigned int i = 0; i < cloud.width; i++) {
+    for (unsigned int i = 0; i < cloud.width; i++)
+    {
         float data_array[num_channels] = {
             keypoints[i].pt.x,
             keypoints[i].pt.y,
@@ -309,10 +317,9 @@ sensor_msgs::PointCloud2 keypoints_to_pointcloud(std::vector<cv::KeyPoint>& keyp
         memcpy(cloud_data_ptr + (i * cloud.point_step), data_array, num_channels * sizeof(float));
     }
     return cloud;
-
 }
 
-sensor_msgs::PointCloud2 mappoint_to_pointcloud(std::vector<ORB_SLAM3::MapPoint*> map_points, ros::Time msg_time)
+sensor_msgs::PointCloud2 mappoint_to_pointcloud(std::vector<ORB_SLAM3::MapPoint *> map_points, ros::Time msg_time)
 {
     const int num_channels = 3; // x y z
 
@@ -333,7 +340,7 @@ sensor_msgs::PointCloud2 mappoint_to_pointcloud(std::vector<ORB_SLAM3::MapPoint*
     cloud.row_step = cloud.point_step * cloud.width;
     cloud.fields.resize(num_channels);
 
-    std::string channel_id[] = { "x", "y", "z"};
+    std::string channel_id[] = {"x", "y", "z"};
 
     for (int i = 0; i < num_channels; i++)
     {
@@ -347,7 +354,6 @@ sensor_msgs::PointCloud2 mappoint_to_pointcloud(std::vector<ORB_SLAM3::MapPoint*
 
     unsigned char *cloud_data_ptr = &(cloud.data[0]);
 
-
     for (unsigned int i = 0; i < cloud.width; i++)
     {
         if (map_points[i])
@@ -359,41 +365,50 @@ sensor_msgs::PointCloud2 mappoint_to_pointcloud(std::vector<ORB_SLAM3::MapPoint*
             float data_array[num_channels] = {
                 point_translation.x(),
                 point_translation.y(),
-                point_translation.z()
-            };
+                point_translation.z()};
 
-            memcpy(cloud_data_ptr+(i*cloud.point_step), data_array, num_channels*sizeof(float));
+            memcpy(cloud_data_ptr + (i * cloud.point_step), data_array, num_channels * sizeof(float));
         }
     }
     return cloud;
 }
 
-cv::Mat SE3f_to_cvMat(Sophus::SE3f T_SE3f)
+cv::Mat SE3f_to_cvMat(Sophus::SE3f T_SE3f, tf::Transform cam_to_world_offset)
 {
     cv::Mat T_cvmat;
 
     Eigen::Matrix4f T_Eig3f = T_SE3f.matrix();
     cv::eigen2cv(T_Eig3f, T_cvmat);
-    
+
     return T_cvmat;
 }
 
-tf::Transform SE3f_to_tfTransform(Sophus::SE3f T_SE3f)
+tf::Transform SE3f_to_tfTransform(Sophus::SE3f T_SE3f, tf::Transform cam_to_world_offset)
 {
     Eigen::Matrix3f R_mat = T_SE3f.rotationMatrix();
     Eigen::Vector3f t_vec = T_SE3f.translation();
 
-    tf::Matrix3x3 R_tf(
-        R_mat(0, 0), R_mat(0, 1), R_mat(0, 2),
-        R_mat(1, 0), R_mat(1, 1), R_mat(1, 2),
-        R_mat(2, 0), R_mat(2, 1), R_mat(2, 2)
-    );
+    // tf::Matrix3x3 R_tf(
+    //     R_mat(0, 0), R_mat(0, 1), R_mat(0, 2),
+    //     R_mat(1, 0), R_mat(1, 1), R_mat(1, 2),
+    //     R_mat(2, 0), R_mat(2, 1), R_mat(2, 2)
+    // );
 
     tf::Vector3 t_tf(
-        t_vec(0),
-        t_vec(1),
-        t_vec(2)
-    );
+        t_vec(2),
+        -t_vec(0),
+        -t_vec(1));
 
-    return tf::Transform(R_tf, t_tf);
+    t_tf = t_tf + cam_to_world_offset.getOrigin();
+
+    cv::Mat R_tf = ORB_SLAM3::Converter::toCvMat(R_mat);
+    vector<float> q = ORB_SLAM3::Converter::toQuaternion(R_tf);
+
+    tf::Quaternion tf_q;
+    tf_q.setX(q[2]);
+    tf_q.setY(q[0]);
+    tf_q.setZ(-q[1]);
+    tf_q.setW(q[3]);
+
+    return tf::Transform(tf_q, t_tf);
 }

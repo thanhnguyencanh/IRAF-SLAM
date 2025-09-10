@@ -13,18 +13,19 @@
 
         <!-- Parameters for ROS -->
         <param name="world_frame_id"    type="string"   value="world" />
-        <param name="cam_frame_id"      type="string"   value="camera" />
+        <param name="cam_frame_id"      type="string"   value="trajectory_server_iraf_slam" />
         <param name="enable_pangolin"   type="bool"     value="true" />
     </node>
     
     <!-- Visualization -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iraf_slam_ros)/config/iraf_slam_rgbd.rviz" output="screen" />
-    
+
+    <node name="ros_bag" pkg="rosbag" type="play" args="/home/thanhnc/vslam_ws/src/rgbd_dataset_freiburg1_xyz.bag --clock" output="screen" />
     <!-- Trajectory path -->
-    <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_iraf_slam" output="screen" ns="iraf_slam_ros" >
+    <!-- <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_iraf_slam" output="screen" ns="iraf_slam_ros" >
         <param name="/target_frame_name" value="/world" />
-        <param name="/source_frame_name" value="/camera" />
+        <param name="/source_frame_name" value="/trajectory_server_iraf_slam" />
         <param name="/trajectory_update_rate" value="20.0" />
         <param name="/trajectory_publish_rate" value="20.0" />
-    </node>
+    </node> -->
 </launch>

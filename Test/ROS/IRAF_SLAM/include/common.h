@@ -36,15 +36,16 @@
 extern ORB_SLAM3::System* pSLAM;
 extern ORB_SLAM3::System::eSensor sensor_type;
 
-extern std::string world_frame_id, cam_frame_id, imu_frame_id;
+extern std::string world_frame_id, cam_frame_id, imu_frame_id, cam_to_world;
 
 extern ros::Publisher pose_pub, odom_pub, kf_markers_pub;
 extern ros::Publisher tracked_mappoints_pub, all_mappoints_pub;
 extern image_transport::Publisher tracking_img_pub;
+extern tf::Transform cam_to_world_offset;
 
 void setup_services(ros::NodeHandle&, std::string);
 void setup_publishers(ros::NodeHandle&, image_transport::ImageTransport&, std::string);
-void publish_topics(ros::Time, Eigen::Vector3f = Eigen::Vector3f::Zero());
+void publish_topics(ros::Time, tf::Transform, Eigen::Vector3f = Eigen::Vector3f::Zero());
 
 void publish_camera_pose(Sophus::SE3f, ros::Time);
 void publish_tracking_img(cv::Mat, ros::Time);
@@ -53,7 +54,7 @@ void publish_keypoints(std::vector<ORB_SLAM3::MapPoint*>, std::vector<cv::KeyPoi
 sensor_msgs::PointCloud2 keypoints_to_pointcloud(std::vector<cv::KeyPoint>&, ros::Time);
 
 void publish_all_points(std::vector<ORB_SLAM3::MapPoint*>, ros::Time);
-void publish_tf_transform(Sophus::SE3f, string, string, ros::Time);
+void publish_tf_transform(Sophus::SE3f, tf::Transform, string, string, ros::Time);
 void publish_body_odom(Sophus::SE3f, Eigen::Vector3f, Eigen::Vector3f, ros::Time);
 void publish_kf_markers(std::vector<Sophus::SE3f>, ros::Time);
 
@@ -61,5 +62,5 @@ bool save_map_srv(iraf_slam_ros::SaveMap::Request&, iraf_slam_ros::SaveMap::Resp
 bool save_traj_srv(iraf_slam_ros::SaveMap::Request&, iraf_slam_ros::SaveMap::Response&);
 
 cv::Mat SE3f_to_cvMat(Sophus::SE3f);
-tf::Transform SE3f_to_tfTransform(Sophus::SE3f);
+tf::Transform SE3f_to_tfTransform(Sophus::SE3f, tf::Transform);
 sensor_msgs::PointCloud2 mappoint_to_pointcloud(std::vector<ORB_SLAM3::MapPoint*>, ros::Time);
