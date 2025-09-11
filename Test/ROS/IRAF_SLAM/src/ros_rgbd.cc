@@ -127,7 +127,7 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sens
 
     publish_topics(msg_time, cam_to_world_offset);
 
-    frameCounter++;
+    // frameCounter++;
 
     // Print frame rate every x second
     // if ((cv_ptrRGB->header.stamp - lastStamp).toSec() >= 5.0)

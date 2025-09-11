@@ -101,11 +101,11 @@ void publish_topics(ros::Time msg_time, tf::Transform cam_to_world_offset, Eigen
 
     publish_tracking_img(pSLAM->GetCurrentFrame(), msg_time);
 
-    publish_keypoints(pSLAM->GetTrackedMapPoints(), pSLAM->GetTrackedKeyPoints(), msg_time);
+    // publish_keypoints(pSLAM->GetTrackedMapPoints(), pSLAM->GetTrackedKeyPoints(), msg_time);
 
-    publish_tracked_points(pSLAM->GetTrackedMapPoints(), msg_time);
-    publish_all_points(pSLAM->GetAllMapPoints(), msg_time);
-    publish_kf_markers(pSLAM->GetAllKeyframePoses(), msg_time);
+    // publish_tracked_points(pSLAM->GetTrackedMapPoints(), msg_time);
+    // publish_all_points(pSLAM->GetAllMapPoints(), msg_time);
+    // publish_kf_markers(pSLAM->GetAllKeyframePoses(), cam_to_world_offset, msg_time);
 
     // IMU-specific topics
     if (sensor_type == ORB_SLAM3::System::IMU_MONOCULAR || sensor_type == ORB_SLAM3::System::IMU_STEREO || sensor_type == ORB_SLAM3::System::IMU_RGBD)
@@ -271,7 +271,7 @@ void publish_all_points(std::vector<ORB_SLAM3::MapPoint *> map_points, ros::Time
 }
 
 // More details: http://docs.ros.org/en/api/visualization_msgs/html/msg/Marker.html
-void publish_kf_markers(std::vector<Sophus::SE3f> vKFposes, ros::Time msg_time)
+void publish_kf_markers(std::vector<Sophus::SE3f> vKFposes, tf::Transform cam_to_world_offset, ros::Time msg_time)
 {
     int numKFs = vKFposes.size();
     if (numKFs == 0)
@@ -294,13 +294,22 @@ void publish_kf_markers(std::vector<Sophus::SE3f> vKFposes, ros::Time msg_time)
 
     for (int i = 0; i <= numKFs; i++)
     {
-        geometry_msgs::Point kf_marker;
-        kf_marker.x = vKFposes[i].translation().x();
-        kf_marker.y = vKFposes[i].translation().y();
-        kf_marker.z = vKFposes[i].translation().z();
+        geometry_msgs::Point kf_marker;        
+        Eigen::Vector3f t_vec = vKFposes[i].translation();
+
+        tf::Vector3 t_tf(
+            t_vec(2),
+            -t_vec(0),
+            -t_vec(1));
+        
+        t_tf = t_tf + cam_to_world_offset.getOrigin();
+
+        kf_marker.x = t_tf[0];
+        kf_marker.y = t_tf[1];
+        kf_marker.z = t_tf[2];
+
         kf_markers.points.push_back(kf_marker);
     }
-
     kf_markers_pub.publish(kf_markers);
 }
 
