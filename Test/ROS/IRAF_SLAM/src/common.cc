@@ -96,7 +96,7 @@ void publish_topics(ros::Time msg_time, tf::Transform cam_to_world_offset, Eigen
         return;
 
     // Common topics
-    publish_camera_pose(Twc, msg_time);
+    publish_camera_pose(Twc, cam_to_world_offset, msg_time);
     publish_tf_transform(Twc, cam_to_world_offset, world_frame_id, cam_frame_id, msg_time);
 
     publish_tracking_img(pSLAM->GetCurrentFrame(), msg_time);
@@ -150,20 +150,52 @@ void publish_body_odom(Sophus::SE3f Twb_SE3f, Eigen::Vector3f Vwb_E3f, Eigen::Ve
     odom_pub.publish(odom_msg);
 }
 
-void publish_camera_pose(Sophus::SE3f Tcw_SE3f, ros::Time msg_time)
+void publish_camera_pose(Sophus::SE3f Tcw_SE3f, tf::Transform cam_to_world_offset, ros::Time msg_time)
 {
     geometry_msgs::PoseStamped pose_msg;
     pose_msg.header.frame_id = world_frame_id;
     pose_msg.header.stamp = msg_time;
 
-    pose_msg.pose.position.x = Tcw_SE3f.translation().x();
-    pose_msg.pose.position.y = Tcw_SE3f.translation().y();
-    pose_msg.pose.position.z = Tcw_SE3f.translation().z();
+    // pose_msg.pose.position.x = Tcw_SE3f.translation().z();
+    // pose_msg.pose.position.y = -Tcw_SE3f.translation().x();
+    // pose_msg.pose.position.z = -Tcw_SE3f.translation().y();
 
-    pose_msg.pose.orientation.w = Tcw_SE3f.unit_quaternion().coeffs().w();
-    pose_msg.pose.orientation.x = Tcw_SE3f.unit_quaternion().coeffs().x();
-    pose_msg.pose.orientation.y = Tcw_SE3f.unit_quaternion().coeffs().y();
-    pose_msg.pose.orientation.z = Tcw_SE3f.unit_quaternion().coeffs().z();
+    // pose_msg.pose.orientation.w = Tcw_SE3f.unit_quaternion().coeffs().w();
+    // pose_msg.pose.orientation.x = Tcw_SE3f.unit_quaternion().coeffs().x();
+    // pose_msg.pose.orientation.y = Tcw_SE3f.unit_quaternion().coeffs().y();
+    // pose_msg.pose.orientation.z = Tcw_SE3f.unit_quaternion().coeffs().z();
+
+    Eigen::Matrix3f R_mat = Tcw_SE3f.rotationMatrix();
+    Eigen::Vector3f t_vec = Tcw_SE3f.translation();
+
+    tf::Vector3 t_tf(
+        t_vec(2),
+        -t_vec(0),
+        -t_vec(1));
+
+    t_tf = t_tf + cam_to_world_offset.getOrigin();
+    // ROS_WARN_STREAM_ONCE("cam_to_world_offset = \n"
+    //                                   << cam_to_world_offset.getOrigin().x() << ", "
+    //                                   << cam_to_world_offset.getOrigin().y() << ", "
+    //                                   << cam_to_world_offset.getOrigin().z() << "\n ");
+
+    cv::Mat R_tf = ORB_SLAM3::Converter::toCvMat(R_mat);
+    vector<float> q = ORB_SLAM3::Converter::toQuaternion(R_tf);
+
+    tf::Quaternion tf_q;
+    tf_q.setX(q[2]);
+    tf_q.setY(q[0]);
+    tf_q.setZ(-q[1]);
+    tf_q.setW(q[3]);
+
+    pose_msg.pose.position.x = t_tf[0];
+    pose_msg.pose.position.y = t_tf[1];
+    pose_msg.pose.position.z = t_tf[2];
+
+    pose_msg.pose.orientation.w = tf_q.getW();
+    pose_msg.pose.orientation.x = tf_q.getX();
+    pose_msg.pose.orientation.y = tf_q.getY();
+    pose_msg.pose.orientation.z = tf_q.getZ();
 
     pose_pub.publish(pose_msg);
 }

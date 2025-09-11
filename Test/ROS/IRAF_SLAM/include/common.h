@@ -47,7 +47,7 @@ void setup_services(ros::NodeHandle&, std::string);
 void setup_publishers(ros::NodeHandle&, image_transport::ImageTransport&, std::string);
 void publish_topics(ros::Time, tf::Transform, Eigen::Vector3f = Eigen::Vector3f::Zero());
 
-void publish_camera_pose(Sophus::SE3f, ros::Time);
+void publish_camera_pose(Sophus::SE3f, tf::Transform, ros::Time);
 void publish_tracking_img(cv::Mat, ros::Time);
 void publish_tracked_points(std::vector<ORB_SLAM3::MapPoint*>, ros::Time);
 void publish_keypoints(std::vector<ORB_SLAM3::MapPoint*>, std::vector<cv::KeyPoint>, ros::Time);
